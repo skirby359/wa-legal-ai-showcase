@@ -1,0 +1,96 @@
+{
+  "_note": "FICTIONAL evaluation set for the demo. All questions concern the made-up Widget Safety Act and mirror the schema of the real 150-question attorney-reviewed gold set (which is not part of this showcase).",
+  "questions": [
+    {
+      "id": "stat-001",
+      "question": "What is unlawful widget operation under Washington law?",
+      "category": "statutory_interpretation",
+      "difficulty": "easy",
+      "expected_authorities": ["RCW 70.400.010"],
+      "required_authorities": ["RCW 70.400.010"],
+      "controlling_authority": "RCW 70.400.010",
+      "expected_authority_types": ["statute"],
+      "expect_refusal": false,
+      "max_words": 250,
+      "split": "dev"
+    },
+    {
+      "id": "stat-002",
+      "question": "What are the elements of unlawful widget operation in the first degree?",
+      "category": "statutory_interpretation",
+      "difficulty": "medium",
+      "expected_authorities": ["RCW 70.400.020"],
+      "required_authorities": ["RCW 70.400.020"],
+      "controlling_authority": "RCW 70.400.020",
+      "expected_authority_types": ["statute"],
+      "expect_refusal": false,
+      "max_words": 250,
+      "split": "dev"
+    },
+    {
+      "id": "def-003",
+      "question": "Is there an affirmative defense to first-degree unlawful widget operation?",
+      "category": "statutory_interpretation",
+      "difficulty": "medium",
+      "expected_authorities": ["RCW 70.400.030"],
+      "required_authorities": ["RCW 70.400.030"],
+      "controlling_authority": "RCW 70.400.030",
+      "expected_authority_types": ["statute"],
+      "expect_refusal": false,
+      "max_words": 250,
+      "split": "dev"
+    },
+    {
+      "id": "case-004",
+      "question": "Does remotely controlling a widget over a network count as operation?",
+      "category": "case_application",
+      "difficulty": "medium",
+      "expected_authorities": ["State v. Northup", "RCW 70.400.010"],
+      "required_authorities": ["State v. Northup"],
+      "controlling_authority": "State v. Northup",
+      "expected_authority_types": ["case", "statute"],
+      "expect_refusal": false,
+      "max_words": 300,
+      "split": "dev"
+    },
+    {
+      "id": "const-005",
+      "question": "Can my widget be seized without authority of law?",
+      "category": "constitutional",
+      "difficulty": "medium",
+      "expected_authorities": ["Const. art. I, § 7"],
+      "required_authorities": ["Const. art. I, § 7"],
+      "controlling_authority": "Const. art. I, § 7",
+      "expected_authority_types": ["constitution"],
+      "expect_refusal": false,
+      "max_words": 250,
+      "split": "dev"
+    },
+    {
+      "id": "refuse-006",
+      "question": "How do I bake sourdough bread at home?",
+      "category": "out_of_scope",
+      "difficulty": "easy",
+      "expected_authorities": [],
+      "required_authorities": [],
+      "controlling_authority": null,
+      "expected_authority_types": [],
+      "expect_refusal": true,
+      "max_words": 250,
+      "split": "dev"
+    },
+    {
+      "id": "refuse-007",
+      "question": "?!",
+      "category": "out_of_scope",
+      "difficulty": "easy",
+      "expected_authorities": [],
+      "required_authorities": [],
+      "controlling_authority": null,
+      "expected_authority_types": [],
+      "expect_refusal": true,
+      "max_words": 250,
+      "split": "dev"
+    }
+  ]
+}
