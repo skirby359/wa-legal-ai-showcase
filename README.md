@@ -82,6 +82,8 @@ The fabricated `State v. Fabricated` never reaches the user.
 `python -m walegal_demo eval` runs the gold set through the pipeline and scores a subset of the
 production metrics (M1–M10):
 
+![Evaluation harness output: all gold-set metrics passing](docs/eval.svg)
+
 ```
 METRIC                              TARGET   ACTUAL   STATUS
 M1 Zero invented citations shown     100%    100%   PASS
