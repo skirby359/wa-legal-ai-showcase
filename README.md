@@ -57,6 +57,8 @@ pytest
 
 With `--hallucinate`, the mock model emits a fabricated citation. The verify stage catches it:
 
+![The verify stage stripping a hallucinated citation before it reaches the user](docs/demo.svg)
+
 ```
 === RAW ANSWER (pre-verification, straight from the model) ===
 Under RCW 70.400.010, the conduct described is governed by the Widget Safety Act. Courts have
