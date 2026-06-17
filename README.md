@@ -113,6 +113,42 @@ numbers on the real corpus.
 
 See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the full stage-by-stage and metric-by-metric mapping.
 
+## Proven across domains
+
+The architecture isn't bespoke to Washington law. The same 7-stage pipeline and verify gate were
+re-pointed at an entirely different body of authority — **federal tax-exempt municipal bond law**
+(the Internal Revenue Code, Treasury Regulations, IRS Revenue Procedures / Rulings / Notices, and
+Tax Court / Federal Circuit opinions) — as a separate private production system.
+
+Re-targeting meant rewriting the **citation grammar** (IRC §, Treas. Reg., Rev. Proc./Rul., Notice),
+the **authority hierarchy** (IRC › Treasury Regs › SCOTUS › Federal Circuit › Tax Court › IRS
+guidance), and the **answer prompt** — *not* rebuilding the engine. The pipeline, the Verify gate,
+and the evaluation harness transferred unchanged.
+
+On a **12-question, attorney-authored tax gold set** — statutory interpretation, multi-source
+synthesis, superseded-guidance history, pin-cite precision, case-law application, and out-of-domain
+refusal — the system passed **all 10 metric gates**. The headline eight:
+
+| Metric | Target | Result |
+|---|---|---|
+| Invented citations shown to user | 0 | **0** |
+| Required-authority recall | ≥90% | **100%** (16/16) |
+| Claim-to-evidence coverage | ≥95% | **98.9%** (137/139 grounded; 2 stripped by Verify) |
+| Controlling authority in top-5 | ≥85% | **90.9%** |
+| Refusal accuracy (out-of-domain) | ≥95% | **100%** (12/12) |
+| Negative-authority avoidance (superseded / overruled) | ≥95% | **100%** |
+| Authority-hierarchy compliance | ≥90% | **100%** |
+| Pin-cite accuracy | ≥90% | **100%** |
+
+The tax domain stresses something Washington law rarely does: **superseded guidance** — e.g. Rev.
+Proc. 2016-44 supersedes 97-13/97-14, then 2017-13 modifies it. The same Verify-stage machinery that
+strips hallucinated citations also avoids citing dead authority, so the system surfaces the
+*controlling* rule, not the repealed one.
+
+*Like the WA system, the bond system runs on a real corpus — here, entirely public IRS / IRC /
+Treasury material — with its prompts and tuning kept private. Figures above are from the 2026-04-26
+evaluation run.*
+
 ## Project layout
 
 ```
