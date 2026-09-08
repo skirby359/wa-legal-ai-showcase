@@ -3,7 +3,7 @@
 > A **runnable, dependency-free** demonstration of the architecture behind a private
 > production system: a **citation-grounded legal-research pipeline that refuses to hallucinate.**
 >
-> The production system answers Washington State legal questions over **~428K real authorities**
+> The production system answers Washington State legal questions over **~271K real authorities**
 > (RCW, WAC, Constitution, and case law from five courts) and scores **98%+ citation accuracy with
 > zero hallucinations** on a 150-question, attorney-reviewed gold set, running **fully air-gapped**.
 >
@@ -104,7 +104,7 @@ numbers on the real corpus.
 
 | This showcase | Production (private) |
 |---|---|
-| Fictional "Widget Safety Act" corpus (`corpus.py`) | ~428K real WA authorities in PostgreSQL + pgvector |
+| Fictional "Widget Safety Act" corpus (`corpus.py`) | ~271K real WA authorities in PostgreSQL + pgvector |
 | Keyword-overlap retrieval | BM25 + dense vectors, Reciprocal Rank Fusion, cross-encoder rerank |
 | `MockProvider` | Local **Ollama** models or the **Claude** API, constrained to allowed citations |
 | Verify: existence + negative-treatment + overstatement | + pin-cite, hierarchy, and semantic claim-support checks |
