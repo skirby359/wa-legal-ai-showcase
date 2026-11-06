@@ -6,9 +6,9 @@ purpose of demonstrating the pipeline. None of it is real Washington law.
 The fictional statutes concern a made-up "Widget Safety Act" so there is no
 chance of confusing the demo with genuine legal authority.
 
-The real system runs against ~428K actual Washington authorities (RCW, WAC,
-Constitution, and case law from five courts). That corpus is not part of this
-showcase.
+The real system runs against ~271K actual Washington authorities (RCW, WAC,
+court rules, the Constitution, and case law from five courts). That corpus is
+not part of this showcase.
 ==========================================================================
 """
 

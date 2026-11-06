@@ -28,10 +28,16 @@ class QuestionResult:
     category: str
     refused: bool
     expected_refusal: bool
+    outcome: str = "answered"  # answered | refused | could_not_verify
     error: bool = False
     citations_checked: int = 0
     citations_passed: int = 0
-    citations_invented_shown: int = 0
+    citations_invented_shown: int = 0   # measured on the final answer text
+    citations_shown: int = 0            # citations in the final answer text
+    negative_unqualified: int = 0       # negative-history cites shown without a warning
+    negative_annotated: bool = False    # passed M7 only because the note was added
+    tool_calls: int = 0
+    llm_calls: int = 0
     required_authority_found: list[str] = field(default_factory=list)
     required_authority_missing: list[str] = field(default_factory=list)
     has_controlling_authority: bool = False

@@ -91,6 +91,19 @@
       "expect_refusal": true,
       "max_words": 250,
       "split": "dev"
+    },
+    {
+      "id": "neg-008",
+      "question": "What did State v. Meadows hold about network control of a widget?",
+      "category": "negative_history",
+      "difficulty": "hard",
+      "expected_authorities": ["State v. Northup", "State v. Meadows"],
+      "required_authorities": ["State v. Northup"],
+      "controlling_authority": "State v. Northup",
+      "expected_authority_types": ["case"],
+      "expect_refusal": false,
+      "max_words": 250,
+      "split": "dev"
     }
   ]
 }

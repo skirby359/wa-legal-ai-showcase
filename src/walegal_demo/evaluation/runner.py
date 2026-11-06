@@ -1,23 +1,41 @@
-"""Run the gold set through the pipeline and score the metrics."""
+"""Run the gold set through one arm (pipeline or agent) and score the metrics.
+
+Both arms go through the same scoring code. Production does the same with an
+``answerer=`` hook on its harness, so an A/B differs only in how each question
+is answered, never in how it is graded.
+"""
 
 from __future__ import annotations
 
+from collections.abc import Callable
+
+from walegal_demo.agent import run_agent
 from walegal_demo.corpus import get_corpus
 from walegal_demo.evaluation.gold import load_gold
 from walegal_demo.evaluation.metrics import ALL_METRICS
 from walegal_demo.evaluation.types import GoldQuestion, MetricScore, QuestionResult
-from walegal_demo.pipeline import run_pipeline
-from walegal_demo.provider import MockProvider
-from walegal_demo.types import PipelineResult
+from walegal_demo.pipeline import extract_citations, run_pipeline, ungrounded_citations
+from walegal_demo.provider import LLMProvider, MockProvider
+from walegal_demo.types import Authority, PipelineResult
+
+Answerer = Callable[[str, list[Authority], LLMProvider], PipelineResult]
+
+ARMS: dict[str, Answerer] = {
+    "baseline": run_pipeline,
+    "agent": run_agent,
+}
 
 
 def _score_question(gold: GoldQuestion, result: PipelineResult) -> QuestionResult:
-    """Convert a pipeline run into a scored QuestionResult."""
+    """Convert one answered (or refused) question into a scored QuestionResult."""
     qr = QuestionResult(
         question_id=gold.id,
         category=gold.category,
         refused=result.refused,
         expected_refusal=gold.expect_refusal,
+        outcome=result.outcome,
+        tool_calls=result.tool_calls,
+        llm_calls=result.llm_calls,
     )
 
     if result.refused:
@@ -39,12 +57,18 @@ def _score_question(gold: GoldQuestion, result: PipelineResult) -> QuestionResul
     if qr.has_controlling_authority:
         qr.controlling_in_top5 = gold.controlling_authority in pack_cites[:5]
 
-    # M1: hallucinated citations stripped (none shown to user).
+    # M1: measured on the text the user sees, not assumed from the strip step.
+    qr.citations_shown = len(extract_citations(result.answer_text))
+    qr.citations_invented_shown = len(ungrounded_citations(result.answer_text, evidence))
+
+    # M7: negative-history authority shown without a warning.
     if verification:
         qr.citations_checked = verification.citations_checked
         qr.citations_passed = verification.citations_passed
-        # Invented citations are stripped, so zero are shown.
-        qr.citations_invented_shown = 0
+        qr.negative_unqualified = sum(
+            1 for c in verification.checks if c.resolved and not c.status_ok
+        )
+        qr.negative_annotated = any(c.status_annotated for c in verification.checks)
 
     # M9 / M10.
     qr.word_count = len(result.answer_text.split())
@@ -53,16 +77,18 @@ def _score_question(gold: GoldQuestion, result: PipelineResult) -> QuestionResul
     return qr
 
 
-def run_evaluation() -> tuple[list[QuestionResult], list[MetricScore]]:
-    """Run every gold question and compute all metrics."""
+def run_evaluation(
+    arm: str = "baseline", provider: LLMProvider | None = None
+) -> tuple[list[QuestionResult], list[MetricScore]]:
+    """Run every gold question through one arm and compute all metrics."""
+    answerer = ARMS[arm]
     corpus = get_corpus()
     gold = load_gold()
-    provider = MockProvider()
+    provider = provider or MockProvider()
 
     results: list[QuestionResult] = []
     for q in gold:
-        pipeline_result = run_pipeline(q.question, corpus, provider)
-        results.append(_score_question(q, pipeline_result))
+        results.append(_score_question(q, answerer(q.question, corpus, provider)))
 
     scores = [metric(results) for metric in ALL_METRICS]
     return results, scores

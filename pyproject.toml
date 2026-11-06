@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "walegal-demo"
-version = "0.1.0"
+version = "0.2.0"
 description = "Sanitized public showcase of a citation-grounded, anti-hallucination legal-research pipeline"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [{ name = "Steve Kirby" }]
-keywords = ["rag", "llm", "legal-tech", "hallucination", "evaluation", "retrieval"]
+keywords = ["rag", "llm", "legal-tech", "hallucination", "evaluation", "retrieval", "agents", "mcp"]
 dependencies = []  # intentionally zero runtime dependencies — runs on the stdlib
 
 [project.optional-dependencies]

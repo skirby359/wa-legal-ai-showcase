@@ -32,8 +32,13 @@ class Authority:
     authority_type: str
     text: str
     court_level: int = COURT_NONE
-    status: str = "good"  # good | overruled | repealed | superseded
+    status: str = "good"  # good | overruled | abrogated | superseded | repealed
     parallel_cites: tuple[str, ...] = ()
+
+    @property
+    def all_cites(self) -> tuple[str, ...]:
+        """The canonical cite followed by any parallel reporter cites."""
+        return (self.canonical_cite, *self.parallel_cites)
 
 
 @dataclass
@@ -85,6 +90,8 @@ class CitationCheck:
     stripped: bool = False
     status_ok: bool = True
     reason: str = ""
+    status: str = "good"           # the cited authority's status, when it resolved
+    status_annotated: bool = False  # passed only because the negative-history note was added
 
 
 @dataclass
@@ -101,8 +108,21 @@ class VerificationResult:
 
 
 @dataclass
+class TraceStep:
+    """One step of an agent run: a tool call, a model call, or an audit."""
+
+    kind: str    # "tool" | "llm" | "audit" | "cap"
+    name: str    # tool name, "draft"/"revise", "audit", or the cap that was hit
+    detail: str = ""
+
+
+@dataclass
 class PipelineResult:
-    """Final output of the 7-stage pipeline."""
+    """Final output of one question, from the pipeline or the agent.
+
+    Both modes return this shape so the evaluation harness scores them with the
+    same code.
+    """
 
     answer_text: str          # post-verification (cleaned) answer
     rendered_text: str        # answer + disclaimer + build metadata
@@ -113,3 +133,8 @@ class PipelineResult:
     refused: bool = False
     refusal_reason: str = ""
     build_id: str = ""
+    mode: str = "pipeline"    # "pipeline" | "agent"
+    outcome: str = "answered"  # "answered" | "refused" | "could_not_verify"
+    trace: list[TraceStep] = field(default_factory=list)
+    tool_calls: int = 0
+    llm_calls: int = 0
